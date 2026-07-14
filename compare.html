@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pairing Lab · Fontastic Find</title>
+<style>
+  :root{
+    --bg:#f3e9cf; --card:#f7f0dc; --panel:#efe4c6; --ink:#2a2620; --ink-soft:#4c463c; --ink-body:#37322b;
+    --gold:#b3892f; --gold-bright:#c8a13a; --gold-deep:#6d5417; --wax:#8a2e22; --rule:#cdb684;
+    --shadow:rgba(32,26,18,.16); --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; --zoom:1;
+  }
+  body.dark{ --bg:#211d19; --card:#2b2723; --panel:#1c1915; --ink:#f2e9cf; --ink-soft:#c8bd9f; --ink-body:#e5dbc0; --rule:#4a4034; --shadow:rgba(0,0,0,.4); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--ink-body);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .ln{font-synthesis:none}
+
+  .bar{position:sticky;top:0;z-index:30;background:rgba(43,39,35,.98);backdrop-filter:blur(6px);border-bottom:2px solid var(--gold);box-shadow:0 3px 16px rgba(20,16,10,.3);padding:11px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{color:var(--gold-bright);font-weight:800;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+  .proj{color:#d8cba8;font-size:.78rem}
+  .proj b{color:#f2e6c6}
+  a.back{color:#e7dcc0;font-size:.74rem;text-decoration:none;border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:6px 10px}
+  a.back:hover{background:var(--gold);color:#241f1a;border-color:var(--gold)}
+  .btn{font-family:var(--sans);font-size:.72rem;color:#e7dcc0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+  .btn:hover{background:var(--gold);color:#241f1a;border-color:var(--gold)}
+  .chip{font-family:var(--sans);font-size:.72rem;color:#e7dcc0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+  .chip.on{background:var(--gold);color:#241f1a;border-color:var(--gold);font-weight:700}
+  .lbl{color:#d8cba8;font-size:.72rem;display:inline-flex;align-items:center;gap:5px}
+  input[type=range]{accent-color:var(--gold-bright);width:110px}
+  .spacer{flex:1}
+
+  .hint{max-width:1500px;margin:16px auto 0;padding:0 20px;font-size:.82rem;color:var(--ink-soft)}
+  .hint b{color:var(--wax)}
+  body.dark .hint b{color:var(--gold-bright)}
+
+  .lab{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:18px;padding:16px 20px 60px;max-width:1500px;margin:0 auto}
+  .pcard{background:var(--card);border:1px solid var(--rule);border-radius:11px;box-shadow:0 2px 11px var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .pc-head{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--panel);border-bottom:1px solid var(--rule);flex-wrap:wrap}
+  .dot{font-family:var(--sans);font-size:.6rem;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+  .dot.d{background:var(--wax)} .dot.b{background:var(--gold-deep)}
+  .pin{font-family:var(--sans);font-size:.82rem;padding:6px 9px;border:1px solid var(--rule);border-radius:5px;background:var(--card);color:var(--ink);min-width:120px;flex:1}
+  .pin:focus{outline:2px solid var(--gold-bright);outline-offset:1px}
+  .mini{background:none;border:1px solid var(--rule);color:var(--ink-soft);border-radius:5px;width:28px;height:28px;cursor:pointer;font-size:.85rem;flex:none}
+  .mini:hover{border-color:var(--gold);color:var(--wax);background:rgba(179,137,47,.1)}
+  .pc-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px}
+  .ln{color:var(--ink);line-height:1.25;word-break:break-word}
+  .pc-foot{padding:0 22px 16px;display:flex;gap:8px}
+  .pc-foot button{font-family:var(--sans);font-size:.66rem;border:1px solid var(--rule);background:transparent;color:var(--ink-soft);border-radius:5px;padding:5px 9px;cursor:pointer}
+  .pc-foot button:hover{border-color:var(--gold);color:var(--wax)}
+
+  .empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);padding:70px 20px;font-size:.95rem}
+  footer{text-align:center;padding:20px;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:.72rem}
+  footer a{color:var(--wax)}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#f6ecd4;font-size:.82rem;padding:10px 20px;border-radius:24px;box-shadow:0 6px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.2s;z-index:50}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:560px){ .lab{grid-template-columns:1fr;padding:12px} }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">⇄ Pairing Lab</span>
+  <a class="back" href="index.html">← Explorer</a>
+  <span class="proj">Project: <b id="projname"></b></span>
+  <div class="spacer"></div>
+  <button class="btn" id="add">＋ add pairing</button>
+  <button class="btn" id="fromshort">＋ from shortlist</button>
+  <button class="btn" id="clear">clear</button>
+  <span class="lbl">zoom <input id="zoom" type="range" min="0.7" max="1.7" step="0.05" value="1"></span>
+  <span class="chip" id="darkt">◐ dark</span>
+</div>
+
+<p class="hint">Each card renders a full pairing through your active project's specimen lines — lines flagged <b>¶</b> use the <b>body</b> font, the rest use the <b>display</b> font. Type any Google font into either field. Edit the specimen itself back in the <b>Explorer</b>.</p>
+
+<div class="lab" id="lab"></div>
+<datalist id="allfonts"></datalist>
+
+<footer>Fonts via <a href="https://fonts.google.com" target="_blank" rel="noopener">Google Fonts</a>. Pairings save with your project.</footer>
+<div id="toast"></div>
+
+<script src="fonts-data.js"></script>
+<script>
+(function(){
+  const lab = document.getElementById("lab");
+  if(typeof GFONTS === "undefined"){ lab.innerHTML='<div class="empty">Could not load <b>fonts-data.js</b> — keep it beside this file, or run through a local server.</div>'; return; }
+  const BY_NAME = {}; GFONTS.forEach(x=>BY_NAME[x.f]=x);
+
+  const LS = { get:(k,d)=>{ try{ const v=JSON.parse(localStorage.getItem("fe_"+k)); return v==null?d:v; }catch(e){ return d; } }, set:(k,v)=>localStorage.setItem("fe_"+k,JSON.stringify(v)) };
+  let projects = LS.get("projects", null);
+  if(!projects){ lab.innerHTML='<div class="empty">No projects found. Open the <a href="index.html">Explorer</a> first to set one up.</div>'; return; }
+  const activeId = LS.get("active", projects[0].id);
+  const project = projects.find(p=>p.id===activeId) || projects[0];
+  function save(){ LS.set("projects", projects); }
+  document.getElementById("projname").textContent = project.name;
+
+  // datalist of all font names
+  document.getElementById("allfonts").innerHTML = GFONTS.map(x=>'<option value="'+x.f.replace(/"/g,"&quot;")+'">').join("");
+
+  // ---------- font loading ----------
+  const loaded = new Set();
+  function famParam(x){
+    const nm=x.f.replace(/ /g,"+");
+    if(x.v){ const [a,b]=x.wr||[400,700]; return x.i?nm+`:ital,wght@0,${a}..${b};1,${a}..${b}`:nm+`:wght@${a}..${b}`; }
+    const ws=x.w.length?x.w:[400];
+    return x.i?nm+":ital,wght@"+ws.map(w=>"0,"+w).concat(ws.map(w=>"1,"+w)).join(";"):nm+":wght@"+ws.join(";");
+  }
+  function loadFont(name){ const x=BY_NAME[name]; if(!x||loaded.has(name))return; loaded.add(name); const l=document.createElement("link"); l.rel="stylesheet"; l.href="https://fonts.googleapis.com/css2?family="+famParam(x)+"&display=swap"; document.head.appendChild(l); }
+
+  function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function buildSpec(disp, body){
+    return project.lines.map(ln=>{
+      const fam = (ln.body && body) ? body : disp;
+      const st="font-family:'"+fam+"';font-weight:"+ln.weight+";font-style:"+(ln.italic?"italic":"normal")
+             +";text-transform:"+(ln.caps?"uppercase":"none")+";letter-spacing:"+(ln.track||0)+"em;font-size:calc("+ln.size+"px * var(--zoom))";
+      return '<div class="ln" style="'+st+'">'+(esc(ln.text)||"&nbsp;")+'</div>';
+    }).join("");
+  }
+
+  // ---------- pairings ----------
+  project.pairings = project.pairings || seedPairings();
+  function seedPairings(){
+    const sl = project.shortlist||[], fv = LS.get("favs",[]);
+    const pool = sl.length>=2 ? sl : (fv.length>=2 ? fv : null);
+    if(pool){ const out=[]; for(let i=0;i+1<pool.length && out.length<3;i+=2) out.push([pool[i],pool[i+1]]); if(out.length) return out; }
+    return [["DM Serif Display","DM Sans"]];
+  }
+
+  function render(){
+    lab.innerHTML="";
+    if(!project.pairings.length){ lab.innerHTML='<div class="empty">No pairings yet. Hit <b>＋ add pairing</b> above.</div>'; return; }
+    project.pairings.forEach((pair,idx)=>{
+      loadFont(pair[0]); loadFont(pair[1]);
+      const el=document.createElement("div"); el.className="pcard";
+      el.innerHTML =
+        '<div class="pc-head">'+
+          '<span class="dot d" title="display font">D</span><input class="pin disp" list="allfonts" value="'+esc(pair[0])+'" spellcheck="false">'+
+          '<span class="dot b" title="body font">B</span><input class="pin body" list="allfonts" value="'+esc(pair[1])+'" spellcheck="false">'+
+          '<button class="mini swap" title="swap display / body">⇄</button>'+
+          '<button class="mini rm" title="remove pairing">✕</button>'+
+        '</div>'+
+        '<div class="pc-body specimen">'+buildSpec(pair[0],pair[1])+'</div>'+
+        '<div class="pc-foot"><button class="copy">copy pairing code</button></div>';
+      const disp=el.querySelector(".disp"), body=el.querySelector(".body"), spec=el.querySelector(".pc-body");
+      function apply(){ pair[0]=disp.value.trim(); pair[1]=body.value.trim(); loadFont(pair[0]); loadFont(pair[1]); spec.innerHTML=buildSpec(pair[0],pair[1]); save(); }
+      disp.addEventListener("change",apply); body.addEventListener("change",apply);
+      el.querySelector(".swap").onclick=()=>{ const t=pair[0]; pair[0]=pair[1]; pair[1]=t; disp.value=pair[0]; body.value=pair[1]; loadFont(pair[0]); loadFont(pair[1]); spec.innerHTML=buildSpec(pair[0],pair[1]); save(); };
+      el.querySelector(".rm").onclick=()=>{ project.pairings.splice(idx,1); save(); render(); };
+      el.querySelector(".copy").onclick=()=>{
+        const lk=n=>{ const x=BY_NAME[n]; return '<link href="https://fonts.googleapis.com/css2?family='+n.replace(/ /g,"+")+((x&&x.i)?":ital,wght@0,400;1,400":"")+'&display=swap" rel="stylesheet">'; };
+        const code="/* Display */ "+lk(pair[0])+"\n/* Body */ "+lk(pair[1])+"\n\nh1,h2,h3{ font-family:'"+pair[0]+"'; }\nbody{ font-family:'"+pair[1]+"'; }";
+        navigator.clipboard.writeText(code).then(()=>toast("Copied "+pair[0]+" × "+pair[1]),()=>toast("Copy failed"));
+      };
+      lab.appendChild(el);
+    });
+  }
+
+  // ---------- controls ----------
+  document.getElementById("add").onclick=()=>{ const sl=project.shortlist||[]; const d=sl[0]||"Playfair Display", b=sl[1]||"Source Sans 3"; project.pairings.push([d,b]); save(); render(); };
+  document.getElementById("fromshort").onclick=()=>{ const sl=project.shortlist||[]; if(sl.length<2){ toast("Shortlist needs 2+ fonts (star ⚑ them in the Explorer)"); return; } const i=Math.floor(Math.random()*sl.length); let j=Math.floor(Math.random()*sl.length); if(j===i)j=(j+1)%sl.length; project.pairings.push([sl[i],sl[j]]); save(); render(); };
+  document.getElementById("clear").onclick=()=>{ if(!project.pairings.length||confirm("Remove all pairings from this project?")){ project.pairings=[]; save(); render(); } };
+  document.getElementById("zoom").addEventListener("input",e=>document.documentElement.style.setProperty("--zoom",e.target.value));
+  document.getElementById("darkt").addEventListener("click",e=>{ document.body.classList.toggle("dark"); e.target.classList.toggle("on"); });
+
+  let toastT; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),2000); }
+
+  save(); render();
+})();
+</script>
+</body>
+</html>
