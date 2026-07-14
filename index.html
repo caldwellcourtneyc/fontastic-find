@@ -291,7 +291,7 @@
       '<div class="top">'+
         '<a class="name" href="https://fonts.google.com/specimen/'+x.f.replace(/ /g,"+")+'" target="_blank" rel="noopener">'+esc(x.f)+'</a>'+
         '<span class="tag cat">'+catName+'</span>'+
-        '<span class="tag '+(x.i?"i-y":"i-n")+'">'+(x.i?"italic":"no ital")+'</span>'+
+        (x.i ? '' : '<span class="tag i-n">no italic</span>')+
         '<span class="meta">'+weightMeta(x)+'</span>'+
         '<span class="spacer"></span>'+
         '<button class="act star'+(favs.has(x.f)?" on":"")+'" title="favorite (global)">'+(favs.has(x.f)?"★":"☆")+'</button>'+

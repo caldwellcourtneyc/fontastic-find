@@ -1,6 +1,6 @@
 # Fontastic Find
 
-A fast, self-service browser for the entire Google Fonts catalog — built to answer the questions the official directory makes hard: *Which of these has a real italic? Enough weights? Something distinctive rather than the same five ubiquitous faces? And how does it actually look in **my** layout?*
+A fast, self-service browser for the entire Google Fonts catalog, built to make finding the right typeface actually quick. Filter the whole catalog by category, weight, and style. Preview faces in your own words. Audition pairings in your own layout. All the things the official directory makes slow.
 
 Everything runs client-side. No build step, no API key, no server required.
 
