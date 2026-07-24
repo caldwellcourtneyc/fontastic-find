@@ -153,7 +153,7 @@
     <span class="chip" data-f="shortOnly">⚑ shortlist</span>
     <div class="divider"></div>
     <span class="lbl">sort
-      <select id="sort"><option value="popular">popular</option><option value="rarest">rarest first</option><option value="az">A–Z</option></select>
+      <select id="sort"><option value="az">A–Z</option><option value="popular">popular</option><option value="rarest">rarest first</option></select>
     </span>
     <span class="lbl">zoom <input id="zoom" type="range" min="0.7" max="1.7" step="0.05" value="1"></span>
     <span class="chip" id="darkt">◐ dark</span>
@@ -219,7 +219,7 @@
   function saveProjects(){ LS.set("projects",projects); LS.set("active",activeId); }
 
   // ---------- transient filter state ----------
-  const state = { q:"", cats:new Set(), italOnly:false, varOnly:false, minW:1, hideOver:false, favOnly:false, shortOnly:false, sort:"popular" };
+  const state = { q:"", cats:new Set(), italOnly:false, varOnly:false, minW:1, hideOver:false, favOnly:false, shortOnly:false, sort:"az" };
 
   // ---------- font loading (weight-aware, lazy, deduped) ----------
   const loaded = new Set();
